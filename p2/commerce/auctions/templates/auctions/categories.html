@@ -1,0 +1,44 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<h2>Filter by Category</h2>
+
+{% if filter %}
+    <div class="alert alert-success" role="alert">
+        Changed filter to {{ category }}
+        <form action="{% url 'categories' filter=None %}" method="post">
+            {% csrf_token %}
+            <button type="submit" style="background-color: rgb(0, 171, 83);">Remove filter</button>
+        </form>
+    </div>
+{% endif %}
+
+<ul>
+    {% for category in categories %}
+    <li><a href="{% url 'categories' filter=category.id %}">{{ category }}</a></li>
+    {% endfor %}
+</ul>
+
+{% if filter %}
+    <h2>Results for {{ category }}:</h2>
+{% else %}
+    <h2>All Listings:</h2>
+{% endif %}
+
+{% for listing in listings %}
+<div class="listing-container">
+    {% with image_url=listing.url|default:"/static/see-none.jpg" %}
+    <img src="{{ image_url }}">
+    {% endwith %}
+    <div class="test">
+        <a href="{% url 'listing' listing.id %}">
+            <h5>{{ listing.title }} @{{ listing.owner }}</h5>
+        </a>
+        <p><i>in {{ listing.category }}</i></p>
+        <p>{{ listing.description }}</p>
+    </div>
+</div>
+{% endfor %}
+
+
+{% endblock %}

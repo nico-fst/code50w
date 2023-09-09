@@ -1,0 +1,23 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+
+
+{% for zuwatchend in watchlist %}
+<div class="listing-container">
+    {% with image_url=zuwatchend.listing.url|default:"/static/see-none.jpg" %}
+    <img src="{{ image_url }}">
+    {% endwith %}
+    <div class="listing-text">
+        <a href="{% url 'listing' zuwatchend.listing.id %}">
+            <h5>{{ zuwatchend.listing.title }} @{{ zuwatchend.listing.owner }}</h5>
+        </a>
+        <p><i>in {{ zuwatchend.listing.category }}</i></p>
+        <b>{{ zuwatchend.listing.price }}€</b>
+        <p>{{ zuwatchend.listing.description }}</p>
+    </div>
+</div>
+{% endfor %}
+
+{% endblock %}

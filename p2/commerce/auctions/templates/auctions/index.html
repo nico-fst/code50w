@@ -1,0 +1,22 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<h2>Active Listings</h2>
+
+{% for listing in listings %}
+    <div class="listing-container">
+        {% with image_url=listing.url|default:"/static/see-none.jpg" %}
+        <img src="{{ image_url }}">
+        {% endwith %}
+        <div class="listing-text">
+            <a href="{% url 'listing' listing.id %}">
+                <h5>{{ listing.title }} @{{ listing.owner }}</h5>
+            </a>
+            <p><i>in {{ listing.category }}</i></p>
+            <b>{{ listing.price }}€</b>
+            <p>{{ listing.description }}</p>
+        </div>
+    </div>
+{% endfor %}
+
+{% endblock %}

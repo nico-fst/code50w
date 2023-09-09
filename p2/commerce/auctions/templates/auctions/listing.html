@@ -1,0 +1,78 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+<div class="listing-container">
+    {% with image_url=listing.url|default:"/static/see-none.jpg" %}
+    <img src="{{ image_url }}">
+    {% endwith %}
+    <div class="listing-text">
+        <h5>{{ listing.title }} @{{ listing.owner }}</h5>
+        <p><i>in {{ listing.category }}</i></p>
+        <p>{{ listing.description }}</p>
+    </div>
+</div>
+
+<div class="listing-container" style="padding-left: 40px; padding-right: 80px;">
+    {% if user.is_authenticated %}
+
+        {% if listing.opened %}
+
+            {% if onWatchlist %}
+            <form method="POST" action="{% url 'watchlist_remove' id=listing.id %}">
+                {% csrf_token %}
+                <button type="submit">- Remove from Watchlist</button>
+            </form>
+            {% else %}
+            <form method="POST" action="{% url 'watchlist_add' id=listing.id %}">
+                {% csrf_token %}
+                <button type="submit">+ Add to Watchlist</button>
+            </form>
+            {% endif %}
+
+            {% if closable %}
+            <form action="{% url 'close_listing' listing=listing.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit">Close this listing</button>
+            </form>
+            {% else %}
+            <form action="{% url 'bid' listing=listing.id %}" method="post">
+                {% csrf_token %}
+                {{ form }}
+                <button type="submit">Bid</button>
+            </form>
+            {% endif %}
+
+        {% else %}
+
+            {% if won %}
+                <strong>Congratulations! You have won this listing :)</strong>
+            {% endif %}
+            
+        {% endif %}
+
+    {% else %}
+
+    <a href="{% url 'login' %}">Sign in</a> to add items to your Watchlist, comment and bid.
+
+    {% endif %}
+
+</div>
+
+{% if user.is_authenticated %}
+    <form action="{% url 'comment' id=listing.id %}" id="comment-form" method="post">
+        {% csrf_token %}
+        {{ comment_form }}
+        <input id="button" type="submit" value="Post">
+    </form>
+{% endif %}
+
+{% for comment in comments %}
+    <div class="comment-container">
+        <div class="comment-commenter-container" style="margin-right: 20px;">@{{ comment.user }}:</div>
+        <span style="color: lightgray; margin-right: 2em;">{{ comment.time|date:"d.m.Y" }} </span>
+        <span>{{ comment.content }}</span>
+    </div>
+{% endfor %}
+
+{% endblock %}
