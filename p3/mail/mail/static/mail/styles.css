@@ -1,0 +1,15 @@
+textarea {
+    min-height: 400px;
+}
+
+.mailItem {
+    border: 1px solid #3579F6;
+    border-radius: 15px;
+    padding: 10px;
+    margin-bottom: 10px;
+    transition: box-shadow .3s;
+}
+
+.mailItem:hover {
+    box-shadow: 0 0 10px #79a8ff;
+}
