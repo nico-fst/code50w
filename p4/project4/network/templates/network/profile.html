@@ -1,0 +1,25 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+
+    <h1>{{ profile.username }}</h1>
+    <b>Followers:</b> {{ followers }}<br>
+    <b>Following:</b> {{ following }}<br>
+
+    {% if user.is_authenticated %}
+        {% if user != profile %}
+        <a class="btn btn-primary" href="{% url 'toggle_follow' profile.id %}">{{ button_text }}</a>
+        {% endif %}
+
+        <div id="follow">
+        </div>
+    {% endif %}
+
+    {% for post in posts %}
+        <div class="post">
+            ({{ post.timestamp }}) <br>
+            {{ post.content}}
+        </div>
+    {% endfor %}
+
+{% endblock %}
